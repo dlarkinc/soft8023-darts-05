@@ -12,9 +12,14 @@ def my_function(message, wait=2):
     return "goodbye!"
 
 
+def my_callback(dummy):
+    print("Some work to do after")
+
+
 if __name__ == "__main__":
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         future1 = executor.submit(my_function, message="Hello", wait=6)
+        future1.add_done_callback(my_callback)
         time.sleep(1)
         future2 = executor.submit(my_function, message="there", wait=7)
         time.sleep(1)

@@ -17,7 +17,7 @@ if __name__ == "__main__":
                         datefmt="%H:%M:%S")
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        executor.map(thread_function, range(7))
+        executor.map(thread_function, range(3))
 
     my_other_map = ["one", "two", "three"]
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
