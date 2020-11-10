@@ -1,0 +1,48 @@
+from __future__ import print_function
+
+from twisted.internet import reactor, defer, endpoints
+from twisted.internet.endpoints import TCP4ClientEndpoint, connectProtocol
+from twisted.protocols.amp import AMP
+from examples.twisted.twisted4_ampserver import Sum, Divide
+
+
+def doMath():
+    destination = TCP4ClientEndpoint(reactor, '127.0.0.1', 64002)
+    sumDeferred = connectProtocol(destination, AMP())
+
+    def connected(ampProto):
+        return ampProto.callRemote(Sum, a=13, b=81)
+
+    sumDeferred.addCallback(connected)
+
+    def summed(result):
+        return result['total']
+
+    sumDeferred.addCallback(summed)
+
+    divideDeferred = connectProtocol(destination, AMP())
+
+    def connected(ampProto):
+        return ampProto.callRemote(Divide, numerator=1234, denominator=0)
+
+    divideDeferred.addCallback(connected)
+
+    def trapZero(result):
+        result.trap(ZeroDivisionError)
+        print("Divided by zero: returning INF")
+        return 1e1000
+
+    divideDeferred.addErrback(trapZero)
+
+    def done(results):
+        print('Done with math:')
+        for result in results:
+            print(result[1])
+        reactor.stop()
+
+    defer.DeferredList([sumDeferred, divideDeferred]).addCallback(done)
+
+
+if __name__ == '__main__':
+    doMath()
+    reactor.run()
