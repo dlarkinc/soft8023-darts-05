@@ -19,13 +19,13 @@ def my_callback(dummy):
 if __name__ == "__main__":
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         future1 = executor.submit(my_function, message="Hello", wait=6)
-        future1.add_done_callback(my_callback)
+        #future1.add_done_callback(my_callback)
         time.sleep(1)
-        future2 = executor.submit(my_function, message="there", wait=7)
+        future2 = executor.submit(my_function, message="there", wait=5)
         time.sleep(1)
-        future3 = executor.submit(my_function, message="Dolly", wait=10)
-        future4 = executor.submit(my_function, message="Dolly")
-        # print(future1.result(5))  # wait 5 seconds before timing out
+        future3 = executor.submit(my_function, message="Dolly", wait=4)
+        future4 = executor.submit(my_function, message="Parton")
+        #print(future1.result(3))  # wait 5 seconds before timing out
         print(future1.result())
         print(future2.result())
         print(future3.result())

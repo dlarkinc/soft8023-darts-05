@@ -53,8 +53,9 @@ if __name__ == "__main__":
 
     pipeline = Pipeline()
     event = threading.Event()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         executor.submit(producer, pipeline, event)
+        executor.submit(consumer, pipeline, event)
         executor.submit(consumer, pipeline, event)
 
         time.sleep(.1)

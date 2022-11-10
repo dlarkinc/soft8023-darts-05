@@ -111,6 +111,7 @@ class X01Match(MatchManager, MatchVisitTemplate):
         channel.basic_publish(exchange='',
                               routing_key='player-stats',
                               body=json.dumps(message))
+        print(json.dumps(message))
         connection.close()
 
     def format_summary(self, player_index, visit):

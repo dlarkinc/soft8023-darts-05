@@ -13,5 +13,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             data = conn.recv(512)
             if not data:
                 break
+            print("Received: " + data.decode())
             conn.sendall(data)
-        conn.close()
